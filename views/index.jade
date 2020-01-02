@@ -1,0 +1,128 @@
+extends layout
+
+block content
+  // Elo rankings - currently hard coded
+  section.elo
+    h2 ELO Rankings 
+    -var player = "krish"
+    table   
+      tr
+        th Rank
+        th Name 
+        th ELO Rating 
+        th Rating Change 
+        th W/L Ratio
+        th
+      form(action="/delete-player",method='post')
+        tr
+          td 1
+          td Krish
+          td 1098
+          td 12
+          td 0.95
+          td: button(type="submit", name='button_deletePlayer',value="1",onclick="return confirm('Are you sure you want to delete #{player}?')") Delete
+
+    hr 
+
+  // Game history - currently hard coded
+  section.gameHistory
+    h2 Game History 
+
+    table  
+      tr
+        th Date
+        th Game ID 
+        th(colspan="2") Winners
+        th Winner Score
+        th(colspan="2") Losers
+        th Loser score
+        th
+      form(action="/delete-game",method='post')
+        tr
+          td 12/1/19
+          td #123
+          td Krish
+          td Andy
+          td 1
+          td Eric
+          td Pietro
+          td 2
+          td: button(type="submit", name='button_deleteGame',value="2",onclick="return confirm('Are you sure you want to delete this game?')") Delete
+
+    hr 
+
+  // Game logger - currently hard coded
+  section.gameLogger
+    h2 Game Logger
+
+    // Game logger input validation errors: 
+    if success_gamelog
+      #success Game successfully logged! 
+    else 
+      if errors_gamelog
+        .errors
+          - var errors = errors_gamelog.errors
+          ul  
+            each error in errors
+              li #{error.msg}
+
+    .logGame  
+      form(action="/log-game" method="post")
+
+        .winners
+          label(for="winner1") Winner Offense: 
+          select(name='winner1') 
+            option(value="Krish") Krish
+            option(value="Andy") Andy
+            option(value="Eric") Eric
+            option(value="Pietro") Pietro
+          label(for="winner2") Winner Defense: 
+          select(name='winner2') 
+            option(value="Krish") Krish
+            option(value="Andy") Andy
+            option(value="Eric") Eric
+            option(value="Pietro") Pietro
+
+        .losers
+          label(for="winner2") Loser Offense: 
+          select(name='loser1')  
+            option(value="Krish") Krish
+            option(value="Andy") Andy
+            option(value="Eric") Eric
+            option(value="Pietro") Pietro
+          label(for="winner2") Loser Defence: 
+          select(name='loser2') 
+            option(value="Krish") Krish
+            option(value="Andy") Andy
+            option(value="Eric") Eric
+            option(value="Pietro") Pietro
+
+        .score
+          label(for="score") Loser Score: 
+          select(name="score") Score: 
+            each score, i in [0,1,2,3,4,5,6,7,8,9]
+              option(value=i) #{score}
+
+        button(type="submit") Submit
+
+    hr 
+  
+  // New player input 
+  section.inputPlayer
+    h2 New player input
+
+    // Game logger input validation errors: 
+    if success_submitnewplayer
+      #success Player successfully inputted! 
+    else 
+      if errors_submitnewplayer
+        .errors
+          - var errors = errors_submitnewplayer.errors
+          ul  
+            each error in errors
+              li #{error.msg}
+
+    .inputNewPlayer  
+      form(action="/submit-new-player", method="post")
+          input(name="name", type="text", placeholder="insert new player name", maxLength="30")
+          button(type="submit") Submit
