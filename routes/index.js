@@ -1,7 +1,8 @@
 const express = require('express');
 const { check, validationResult }= require('express-validator');
 const router = express.Router();
-const MongoClient = require('mongodb').MongoClient; 
+const MongoClient = require('mongodb').MongoClient;
+const mongoose = require('mongoose');  
 const assert = require('assert'); 
 
 // mongodb setup 
@@ -103,15 +104,19 @@ router.post('/submit-new-player', [
   check('name').custom(value => {
     client.connect(function(err){
       assert.equal(null,err);
-      const db = client.db(dbName); 
-      return db.collection('player-log').find({name: value}).count()
+      const db = client.db(dbName);
+      var deferred = new Promise(); 
+      db.collection('player-log').find({name: value}).count()
         .then(numItems => {
           if (numItems!==0){ 
-            return Promise.reject('Player name must be unique')     
+            return deferred.reject('Player name must be unique')     
           }
-      return true
+          else { 
+            return deferred.resolve();
+          }  
         })
       })
+      return deferred;
   }) ], 
   
   function(req,res,next){

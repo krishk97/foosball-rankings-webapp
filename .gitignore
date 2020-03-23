@@ -1,3 +1,18 @@
+# Excel 
+*.xlsx
+*.xls
+*.csv
+*.xlsm
+*.xlsb
+*.xltx
+*.xltm
+*.xml
+*.xlt
+*.xlam
+*.xla
+*.xlw
+*.xlr
+
 # Logs
 logs
 *.log
